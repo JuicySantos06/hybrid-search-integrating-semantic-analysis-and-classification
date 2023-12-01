@@ -15,7 +15,7 @@ link: https://xmrec.github.io/data/us/
 ```
 > Create the following database and collection in Atlas
 ```
-DB_NAME = hybrid_search_recommandation_xmarket
+DB_NAME = hybrid_search_recommendation_xmarket
 COLLECTION_NAME = hybrid_search_products
 COLLECTION_NAME = hybrid_search_reviews
 ```
