@@ -21,9 +21,14 @@ COLLECTION_NAME = hybrid_search_reviews
 ```
 
 ### Step 2: Embed both the home and kitchen products and reviews dataset
-> Update the file hybrid_search_with_recommandation_engine.py with the following information:
-* Your MongoDB Atlas connection string => parameter = MONGODB_ATLAS_CONNECTION_STRING
+> Update the file params.py with the following information:
+* Your MongoDB Atlas connection string
+```
+MONGODB_ATLAS_CONNECTION_STRING
+```
 * The path to the cross-market recommendation dataset that you previously downloaded
-* XMARKET_HOME_AND_KITCHEN_PRODUCT_DATA_FILE_PATH
-* XMARKET_HOME_AND_KITCHEN_REVIEWS_DATA_FILE_PATH
+```
+XMARKET_HOME_AND_KITCHEN_PRODUCT_DATA_FILE_PATH
+XMARKET_HOME_AND_KITCHEN_REVIEWS_DATA_FILE_PATH
+```
 > Execute both the step 1 and step 2 in the python script file
