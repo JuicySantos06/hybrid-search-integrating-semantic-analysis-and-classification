@@ -32,3 +32,26 @@ XMARKET_HOME_AND_KITCHEN_PRODUCT_DATA_FILE_PATH
 XMARKET_HOME_AND_KITCHEN_REVIEWS_DATA_FILE_PATH
 ```
 > Execute both the step 1 and step 2 in the python script file
+
+### Step3: Create the Atlas Search index
+> Copy and paste the following index definition into Atlas Search
+> Index name = searchIndex
+```
+{
+    "mappings": {
+      "dynamic": false,
+      "fields": {
+        "features": [
+          {
+            "type": "string"
+          }
+        ],
+        "title": [
+          {
+            "type": "string"
+          }
+        ]
+      }
+    }
+}
+```
