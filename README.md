@@ -55,3 +55,30 @@ XMARKET_HOME_AND_KITCHEN_REVIEWS_DATA_FILE_PATH
     }
 }
 ```
+
+### Step 4: Create the Atlas Vector Search index
+> Copy and paste the following index definition into Atlas Vector Search
+> Index name = vectorIndex
+```
+{
+  "type": "vectorSearch",
+  "fields": [
+    {
+      "numDimensions": 768,
+      "path": "descriptionVectorEmbedding",
+      "similarity": "cosine",
+      "type": "vector"
+    },
+    {
+      "path": "asin",
+      "type": "filter"
+    }
+  ]
+}
+```
+
+
+### Sample user queries to evaluate
+```
+I want a warm and soft white pillow fluffy
+```
