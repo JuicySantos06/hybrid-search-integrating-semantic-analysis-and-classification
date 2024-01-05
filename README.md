@@ -2,7 +2,7 @@
 
 ## General Information
 > The following demo aims to demonstrate the ability to enhance the search experience through the joint use of both keyword-based and vector-based search technology.
-> A semantic analysis and classification mechanism will be added to the hybrid search made possible by the joint use of Atlas Search and Atlas Vector Search to enhance the search engine
+> A semantic analysis and classification mechanism will be added to the hybrid search made possible by the joint use of Atlas Search and Atlas Vector Search to enhance the search engine.
 > We will be using using the following native MongoDB technologies:
 * MongoDB Atlas Search
 * MongoDB Atlas Vector Search
