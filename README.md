@@ -76,5 +76,5 @@ xmarketHomeAndKitchenProductDataFilePath = <XMARKET_HOME_AND_KITCHEN_PRODUCT_DAT
 ```
 
 
-### Step5: Run the python script and enjoy
+### Step5: Run the Python script and enjoy
 
