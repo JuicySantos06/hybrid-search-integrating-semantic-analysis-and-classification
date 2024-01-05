@@ -76,7 +76,5 @@ xmarketHomeAndKitchenProductDataFilePath = <XMARKET_HOME_AND_KITCHEN_PRODUCT_DAT
 ```
 
 
-### Sample user queries to evaluate
-```
-I want a warm and soft white pillow fluffy
-```
+### Step5: Run the python script and enjoy
+
