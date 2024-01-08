@@ -30,6 +30,7 @@ mongodbAtlasUri = <MONGODB_ATLAS_CONNECTION_STRING>
 xmarketHomeAndKitchenProductDataFilePath = <XMARKET_HOME_AND_KITCHEN_PRODUCT_DATA_FILE_PATH>
 ```
 > Execute both the step 1 and step 2 in the python script file and only those steps.
+> After completion, you can comment both steps for later use of the script.
 
 ### Step3: Create the Atlas Search index
 > Copy and paste the following index definition into Atlas Search
