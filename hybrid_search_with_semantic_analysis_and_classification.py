@@ -107,17 +107,6 @@ def data_product_embedding(paramMongoClient, paramMongoCollection):
         except Exception as ex:
             print (f"Exception encountered: {ex}")
 
-#xmarket product review embedding
-def product_reviews_embedding(paramMongoClient, paramMongoCollection):
-    mongodb_collection = (paramMongoClient[mongodbAtlasDatabase])[paramMongoCollection]
-    distilled_student_sentiment_classifier = pipeline(model="lxyuan/distilbert-base-multilingual-cased-sentiments-student", top_k=None)
-    for doc in mongodb_collection.find({}):
-        try:
-            review_embedding = distilled_student_sentiment_classifier(doc["reviewText"])
-            mongodb_collection.update_one({"_id":doc["_id"]},{ "$set": { "reviewScore": review_embedding[0] } })
-        except:
-            pass
-
 #xmarket product full-text search
 def mongodb_atlas_search_query(paramMongoClient, paramMongoCollection,paramUserQuery,paramNumOfResults):
     mongodb_collection = (paramMongoClient[mongodbAtlasDatabase])[paramMongoCollection]
@@ -265,13 +254,11 @@ def inspect_title_similarity(s1,s2):
 def main():
 
     #step 1
-    #open_and_load_into_mdb(xmarketHomeAndKitchenProductDataFilePath, startup_db_connection(mongodbAtlasUri), mongodbAtlasCollectionForProducts)
-    #open_and_load_into_mdb(xmarketHomeAndKitchenReviewsDataFilePath, startup_db_connection(mongodbAtlasUri), mongodbAtlasCollectionForReviews)
+    open_and_load_into_mdb(xmarketHomeAndKitchenProductDataFilePath, startup_db_connection(mongodbAtlasUri), mongodbAtlasCollectionForProducts)
 
     #step 2
-    #data_product_embedding(startup_db_connection(mongodbAtlasUri),mongodbAtlasCollectionForProducts)
-    #product_reviews_embedding(startup_db_connection(mongodbAtlasUri),mongodbAtlasCollectionForReviews)
-
+    data_product_embedding(startup_db_connection(mongodbAtlasUri),mongodbAtlasCollectionForProducts)
+    
     #step 3 - retrieve user inputs
     user_query = input("What product are you looking for? ")
     numOfResults = input("How many items should we display to you? ")
