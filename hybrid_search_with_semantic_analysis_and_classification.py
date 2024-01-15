@@ -55,8 +55,22 @@ def open_and_load_into_mdb(paramFilePath, paramMongoClient, paramMongoCollection
 
 #xmarket product description embedding
 def data_product_embedding(paramMongoClient, paramMongoCollection):
+    print("starting product description embedding")
+
+    mongodb_client = paramMongoClient
+    mongodb_session = mongodb_client.start_session()
+    mongodb_session_id = mongodb_session.session_id
+
     mongodb_collection = (paramMongoClient[mongodbAtlasDatabase])[paramMongoCollection]
-    for doc in mongodb_collection.find():
+    cursor = mongodb_collection.find({},no_cursor_timeout=True)
+    refresh_timestamp = datetime.datetime.now()
+
+    for doc in cursor:
+        print("product description embedding in progress")
+        if (datetime.datetime.now() - refresh_timestamp).total_seconds() > 300:
+            print("refreshing session")
+            mongodb_session.client.admin.command({"refreshSessions": [ mongodb_session_id]})
+            refresh_timestamp = datetime.datetime.now()
         try:
             docFilter = {"_id": doc["_id"]}
             if (len(doc["description"]) == 0):
@@ -106,6 +120,8 @@ def data_product_embedding(paramMongoClient, paramMongoCollection):
                 mongodb_collection.update_one(docFilter,newFieldAttributes)
         except Exception as ex:
             print (f"Exception encountered: {ex}")
+    cursor.close()
+    print("product description embedding completed")
 
 #xmarket product full-text search
 def mongodb_atlas_search_query(paramMongoClient, paramMongoCollection,paramUserQuery,paramNumOfResults):
@@ -254,10 +270,10 @@ def inspect_title_similarity(s1,s2):
 def main():
 
     #step 1
-    open_and_load_into_mdb(xmarketHomeAndKitchenProductDataFilePath, startup_db_connection(mongodbAtlasUri), mongodbAtlasCollectionForProducts)
+    #open_and_load_into_mdb(xmarketHomeAndKitchenProductDataFilePath, startup_db_connection(mongodbAtlasUri), mongodbAtlasCollectionForProducts)
 
     #step 2
-    data_product_embedding(startup_db_connection(mongodbAtlasUri),mongodbAtlasCollectionForProducts)
+    #data_product_embedding(startup_db_connection(mongodbAtlasUri),mongodbAtlasCollectionForProducts)
     
     #step 3 - retrieve user inputs
     user_query = input("What product are you looking for? ")
@@ -322,8 +338,6 @@ def main():
     displaySearchResult.update(cursor_product_vector_search_result_dataframe)
     displaySearchResult['AGG_SCORE'] = displaySearchResult['FTS_SCORE'] * displaySearchResult['VS_SCORE']
     displaySearchResult.sort_values(by='VS_SCORE',ascending=False,inplace=True)
-
-    listOfHtmlFileResults["Keyword-led Search & Vector Search Results"] = displaySearchResult.to_html(escape=False,formatters=dict(IMAGE=to_img_tag)) 
 
     #step 5 - atlas vector search
     vectorSearchResultList = mongodb_atlas_vector_search_query(startup_db_connection(mongodbAtlasUri),mongodbAtlasCollectionForProducts,user_query_embedding.tolist(),int(numOfResults))
@@ -401,8 +415,6 @@ def main():
     display_vector_search_result['AGG_SCORE'] = display_vector_search_result['FTS_SCORE'] * display_vector_search_result['VS_SCORE']
     display_vector_search_result.sort_values(by='FTS_SCORE',ascending=False,inplace=True)
 
-    listOfHtmlFileResults["Vector-led Search & Keyword Search Results"] = display_vector_search_result.to_html(escape=False,formatters=dict(IMAGE=to_img_tag))
-
     agg_result = pandas.concat([displaySearchResult,display_vector_search_result],ignore_index=True)
     agg_result.sort_values(by='AGG_SCORE',ascending=False,inplace=True)
     agg_result = agg_result.drop(agg_result[agg_result.VS_SCORE < 0.7].index)    
@@ -416,13 +428,30 @@ def main():
         agg_result.at[searchResultDataFrameRow.Index,'TITLE_SCORE'] = float((s[2].split("]"))[0])
     
     agg_result = agg_result.drop(agg_result[agg_result.TITLE_SCORE < 0.5].index) 
+
+    displaySearchResult = displaySearchResult.drop(columns=['FTS_SCORE'])
+    displaySearchResult = displaySearchResult.drop(columns=['VS_SCORE'])
+    displaySearchResult = displaySearchResult.drop(columns=['AGG_SCORE'])
+    displaySearchResult = displaySearchResult.drop(columns=['ID'])
+    listOfHtmlFileResults["Keyword-led Search & Vector Search Results"] = displaySearchResult.to_html(escape=False,formatters=dict(IMAGE=to_img_tag)) 
+
+    display_vector_search_result = display_vector_search_result.drop(columns=['AGG_SCORE'])
+    display_vector_search_result = display_vector_search_result.drop(columns=['FTS_SCORE'])
+    display_vector_search_result = display_vector_search_result.drop(columns=['VS_SCORE'])
+    display_vector_search_result = display_vector_search_result.drop(columns=['ID'])
+    listOfHtmlFileResults["Vector-led Search & Keyword Search Results"] = display_vector_search_result.to_html(escape=False,formatters=dict(IMAGE=to_img_tag))
+
     agg_result = agg_result.drop(columns=['TITLE_SCORE'])
+    agg_result = agg_result.drop(columns=['AGG_SCORE'])
+    agg_result = agg_result.drop(columns=['ID'])
     agg_result.drop_duplicates(subset='ID',inplace=True)
     listOfHtmlFileResults["Aggregated Search Results"] = agg_result.to_html(escape=False,formatters=dict(IMAGE=to_img_tag))
-
+    
     init_result_file_html(user_query)
     for key,value in listOfHtmlFileResults.items():
         insert_data_result_file(value,key)
-    
+
+
 if __name__ == "__main__":
     main()
+
