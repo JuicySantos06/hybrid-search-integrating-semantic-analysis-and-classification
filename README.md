@@ -60,7 +60,6 @@ xmarketHomeAndKitchenProductDataFilePath = <XMARKET_HOME_AND_KITCHEN_PRODUCT_DAT
 > Index name = vectorIndex
 ```
 {
-  "type": "vectorSearch",
   "fields": [
     {
       "numDimensions": 768,
