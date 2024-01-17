@@ -1,5 +1,7 @@
 # Hybrid search integrating semantic analysis and classification
 
+!(https://github.com/JuicySantos06/hybrid-search-integrating-semantic-analysis-and-classification/issues/1#issue-2085775161)
+
 ## General Information
 > The following demo aims to demonstrate the ability to enhance the search experience through the joint use of both keyword-based and vector-based search technology.
 > A semantic analysis and classification mechanism will be added to the hybrid search made possible by the joint use of Atlas Search and Atlas Vector Search to enhance the search engine.
