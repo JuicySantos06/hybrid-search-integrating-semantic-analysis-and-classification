@@ -1,7 +1,5 @@
 # Hybrid search integrating semantic analysis and classification
 
-!(https://github.com/JuicySantos06/hybrid-search-integrating-semantic-analysis-and-classification/issues/1#issue-2085775161)
-
 <img width="1427" alt="Screenshot 2024-01-17 at 10 28 40" src="https://github.com/JuicySantos06/hybrid-search-integrating-semantic-analysis-and-classification/assets/84564830/82f58429-36c9-4092-b2d9-66aaa8852698">
 
 ## General Information
