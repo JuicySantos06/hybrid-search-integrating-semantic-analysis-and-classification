@@ -21,7 +21,7 @@ DB_NAME = hybrid_search_recommendation_xmarket
 COLLECTION_NAME = hybrid_search_products
 ```
 
-### Step 2: Embed both the home and kitchen products and reviews dataset
+### Step 2: Embed the home and kitchen products dataset
 > Update the file hybrid_search_with_semantic_analysis_and_classification.py with the following information:
 * Your MongoDB Atlas connection string
 ```
@@ -31,8 +31,13 @@ mongodbAtlasUri = <MONGODB_ATLAS_CONNECTION_STRING>
 ```
 xmarketHomeAndKitchenProductDataFilePath = <XMARKET_HOME_AND_KITCHEN_PRODUCT_DATA_FILE_PATH>
 ```
-> Execute both the step 1 and step 2 in the python script file and only those steps.
-> After completion, you can comment both steps for later use of the script.
+> Only execute the following lines of codes from the python script file:
+```
+> open_and_load_into_mdb(xmarketHomeAndKitchenProductDataFilePath, startup_db_connection(mongodbAtlasUri), mongodbAtlasCollectionForProducts)
+> data_product_embedding(startup_db_connection(mongodbAtlasUri),mongodbAtlasCollectionForProducts)
+> data_product_title_embedding(startup_db_connection(mongodbAtlasUri),mongodbAtlasCollectionForProducts)
+```
+> After completion, you can comment those steps for later use of the script.
 
 ### Step3: Create the Atlas Search index
 > Copy and paste the following index definition into Atlas Search
@@ -76,7 +81,25 @@ xmarketHomeAndKitchenProductDataFilePath = <XMARKET_HOME_AND_KITCHEN_PRODUCT_DAT
   ]
 }
 ```
+> Index name = vectorIndex_2
+```
+{
+  "fields": [
+    {
+      "numDimensions": 768,
+      "path": "titleVectorEmbedding",
+      "similarity": "cosine",
+      "type": "vector"
+    },
+    {
+      "path": "asin",
+      "type": "filter"
+    }
+  ]
+}
+```
 
-
-### Step5: Run the Python script and enjoy
+### Step5: Run the script
+> I share the vector search score for description, title and image objects.
+> You can see the impact of those data on a product's ranking.
 
